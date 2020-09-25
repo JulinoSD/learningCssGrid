@@ -33,9 +33,29 @@ body {
 .container .item2 {
     background: red;
     border-radius: 20% 30% 80% 20% / 50% 20% 80% 30%;
+    animation-name: bind2;
+    animation-duration: infinite;
+}
+
+@keyframes bind2 {
+    10% { border-radius: 30% 20% 30% 80% / 20% 50% 20% 80%;}
+    30% { border-radius: 80% 30% 20% 30% / 80% 20% 50% 20%;}
+    60% { border-radius: 20% 30% 20% 30% / 20% 80% 20% 50%;}
+    100% { border-radius: 50% 80% 20% 30% / 20% 50% 20% 30%;}
 }
 .container .item3 {
     background: yellow;
+    border-radius: 50% 50% 50% 50%/65% 65% 50% 50%;
+    animation-name: bind3;
+    animation-duration: 1s;
+    animation-delay: 1ms;
+}
+
+@keyframes bind3 {
+    10% {border-radius: 30% 50% 50% 50%/30% 65% 50% 50%;}
+    45% {border-radius: 30% 50% 50% 50%/30% 65% 50% 50%;}
+    75% {border-radius: 50% 50% 50% 50%/65% 65% 50% 30%;}
+    100% {border-radius: 50% 50% 50% 50%/65% 65% 50% 50%;}
 }
 .container .item4 {
     background: green;
