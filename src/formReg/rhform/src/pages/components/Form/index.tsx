@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { recaptcha } from 'react-google-recaptcha'
+import ReCaptcha from 'react-google-recaptcha'
 
 //The use of interface is about to define what fields i want on my component
 interface formData {
@@ -19,11 +19,49 @@ export const Form = () => {
             terms: true,
         }
     })
+
+    const [submitting, setSubmitting] = useState<boolean>(false)
+    const [serverErrors, setServerErrors] = useState<Array<string>>([])
+
     return (
         <div>
-            <form onSubmit={handleSubmit((formData) => {
-                console.log(formData, 'Form')
+            <form onSubmit={handleSubmit(async (formData) => {
+                setSubmitting(true)
+                setServerErrors([])
+                // console.log(formData, 'Form')
+                const response = await fetch('api/auth', {
+                    // {Defining the method we going to use on}
+                    method: "POST",
+                    // Defining the content
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    //the datas w post on our form
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        password: formData.password,
+                        terms: formData.terms,
+                    })
+                })
+
+                const data = await response.json()
+
+                if(data.errors){
+                    setServerErrors(data.errors)
+                } else {
+                    console.log('Success, redirect to home page')
+                }
+
+                setSubmitting(false)
             })}>
+                {serverErrors && 
+                (<ul>
+                    {serverErrors.map((error) => (
+                        <li key={error}>{error}</li>
+                    ))}
+                </ul>)}
+
                 <div>
                     <label htmlFor="name">Name</label>
                     <input
@@ -79,7 +117,7 @@ export const Form = () => {
                     {errors.terms ? <div>{errors.terms.message}</div> : null}
                 </div>
                 <div>
-                    <button type="submit">Enroll</button>
+                    <button type="submit" disabled={submitting}>Enroll</button>
                 </div>
             </form>
         </div>
